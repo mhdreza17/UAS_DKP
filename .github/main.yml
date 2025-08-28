@@ -1,4 +1,4 @@
-name: UAS DKP
+name: My Pipeline
 
 on:
   push:
