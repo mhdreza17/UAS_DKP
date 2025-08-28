@@ -1,22 +1,31 @@
-name: UAS DKP NEW
-
+name: CodeQL Security Scan
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
-  php-cs:
+  analyze:
+    name: Analyze
     runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+
     steps:
-      - name: Checkout the repo
+      - name: Checkout repository
         uses: actions/checkout@v3
-      - name: PHP Setup
-        uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
-          tools: phpcs
-      - name: Run phpcs
-        run: phpcs --report-full --standard=PSR2 .
+          fetch-depth: 0
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: php
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
